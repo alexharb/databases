@@ -8,8 +8,13 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function () {},
-    post: function () {}
-  }
+    get: function () {},  // a function which produces all the users
+    post: function () {}  // a function which can be used to insert a user into the database
+  },
+
+  rooms: {
+    get: function () {}, // a function which produces all the rooms
+    post: function () {} // a function which can be used to insert a room into the database
+  },
 };
 
