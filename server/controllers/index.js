@@ -3,36 +3,66 @@ var models = require('../models');
 module.exports = {
   messages: {
     get: function (req, res) {
-      /*
-      status is 200
-      have response, which is all messages(stringified)
-      we don't care about the path
-      */
-      var messages = models.messages.get();
-      res.json(messages);
+      models.messages.get()
+      .then((data) => {
+        res.json(data)
+      })
+      .catch((error) => {
+        res.send(error)
+      })
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      res.json('posted messages!');
+      models.messages.post(req.body)
+      .then((data) => {
+        res.json('its posted!')
+      })
+      .catch((err) => {
+        res.send(err)
+      })
     } // a function which handles posting a message to the database
   },
 
   users: {
     // Ditto as above
     get: function (req, res) {
-      res.json('hell0 from get users');
+      models.users.get()
+      .then((data) => {
+        res.json(data)
+      })
+      .catch((error) => {
+        res.send(error)
+      })
     }, // a function which handles a get request for all users
     post: function (req, res) {
-      res.json('posted users!');
+      models.users.post(req.body)
+      .then((data) => {
+        res.json('its posted! (user)')
+      })
+      .catch((err) => {
+        res.send(err)
+      })
     }  // a function which handles posting a user(?) to the database
   },
 
   rooms: {
     // Ditto as above
     get: function (req, res) {
-      res.json('hell0 from get rooms');
+      models.rooms.get()
+      .then((data) => {
+        res.json(data)
+      })
+      .catch((error) => {
+        res.send(error)
+      })
     }, // a function which handles a get request for all rooms
     post: function (req, res) {
-      res.json('posted rooms!');
+      models.rooms.post(req.body)
+      .then((data) => {
+        res.json('its posted! (room)')
+      })
+      .catch((err) => {
+        res.send(err)
+      })
     }  // a function which handles posting a rooms(?) to the database
   }
 };

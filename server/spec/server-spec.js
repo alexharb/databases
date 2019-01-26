@@ -16,7 +16,7 @@ describe('Persistent Node Chat Server', function() {
     });
     dbConnection.connect();
 
-       var tablename = "messages"; // TODO: fill this out
+       var tablename = "messages"; // TODO fill this out
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
@@ -32,22 +32,32 @@ describe('Persistent Node Chat Server', function() {
     request({
       method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/users',
-      json: { username: 'Valjean' }
-    }, function () {
+      json: {id: 0, user: 'Valjean' }
+    },function () {
+      // Post a room to the node chat server:
+      request({
+        method: 'POST',
+        uri: 'http://127.0.0.1:3000/classes/rooms',
+        json: {
+          id: 0, 
+          roomName: 'Hello'
+        }
+      }, function () {
       // Post a message to the node chat server:
       request({
         method: 'POST',
         uri: 'http://127.0.0.1:3000/classes/messages',
         json: {
-          username: 'Valjean',
-          message: 'In mercy\'s name, three days is all I need.',
-          roomname: 'Hello'
+          id: 0,
+          txt: 'In mercy\'s name, three days is all I need.',
+          user: 0,
+          room: 0
         }
       }, function () {
         // Now if we look in the database, we should find the
         // posted message there.
 
-        // TODO: You might have to change this test to get all the data from
+        // TODO You might have to change this test to get all the data from
         // your message table, since this is schema-dependent.
         var queryString = 'SELECT * FROM messages';
         var queryArgs = [];
@@ -56,7 +66,7 @@ describe('Persistent Node Chat Server', function() {
           // Should have one result:
           expect(results.length).to.equal(1);
 
-          // TODO: If you don't have a column named text, change this test.
+          // TODO If you don't have a column named text, change this test.
           expect(results[0].txt).to.equal('In mercy\'s name, three days is all I need.');
 
           done();
