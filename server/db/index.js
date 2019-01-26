@@ -5,19 +5,20 @@ var mysql = require('mysql');
 // and to the database "chat".
 
 var connection = mysql.createConnection({
-    host: 'http://127.0.0.1:3000/classes/messages',
-    user: 'root',
+    host: 'localhost',
+    user: 'student',
+    password: 'student',
     database: 'chat'
 });
 
 connection.connect()
 
-connection.query('some query text', (err, rows, fields) => {
-    if (err) {
-        throw err;
-    } else {
-        console.log(rows, 'thats rows', fields, 'thats fields');
-    }
-})
+// connection.query('SELECT * FROM messages', (err, rows, fields) => {
+//     if (err) {
+//         console.log('im broke, baybeee', err)
+//     } else {
+//         console.log(rows, 'thats rows', fields, 'thats fields');
+//     }
+// })
 
-connection.end();
+module.exports = connection;
