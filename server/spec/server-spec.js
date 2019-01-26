@@ -16,11 +16,20 @@ describe('Persistent Node Chat Server', function() {
     });
     dbConnection.connect();
 
-       var tablename = "messages"; // TODO fill this out
+    var tablename = "messages"; // TODO fill this out
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
-    dbConnection.query('truncate ' + tablename, done);
+    
+    dbConnection.query('SET FOREIGN_KEY_CHECKS = 0', () => {
+      dbConnection.query('truncate ' + tablename, () => {
+        dbConnection.query('truncate rooms', () => {
+          dbConnection.query('truncate users', () => {
+            dbConnection.query('SET FOREIGN_KEY_CHECKS = 1', done)
+          })
+        });
+      });
+    })
   });
 
   afterEach(function() {
@@ -32,7 +41,9 @@ describe('Persistent Node Chat Server', function() {
     request({
       method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/users',
-      json: {id: 0, user: 'Valjean' }
+      json: {id: 0, 
+        userName: 'Valjean'
+      }
     },function () {
       // Post a room to the node chat server:
       request({
@@ -44,32 +55,33 @@ describe('Persistent Node Chat Server', function() {
         }
       }, function () {
       // Post a message to the node chat server:
-      request({
-        method: 'POST',
-        uri: 'http://127.0.0.1:3000/classes/messages',
-        json: {
-          id: 0,
-          txt: 'In mercy\'s name, three days is all I need.',
-          user: 0,
-          room: 0
-        }
-      }, function () {
-        // Now if we look in the database, we should find the
-        // posted message there.
+        request({
+          method: 'POST',
+          uri: 'http://127.0.0.1:3000/classes/messages',
+          json: {
+            id: 0,
+            txt: 'In mercy\'s name, three days is all I need.',
+            user: 0,
+            room: 0
+          }
+        }, function () {
+          // Now if we look in the database, we should find the
+          // posted message there.
 
-        // TODO You might have to change this test to get all the data from
-        // your message table, since this is schema-dependent.
-        var queryString = 'SELECT * FROM messages';
-        var queryArgs = [];
+          // TODO You might have to change this test to get all the data from
+          // your message table, since this is schema-dependent.
+          var queryString = 'SELECT * FROM messages';
+          var queryArgs = [];
 
-        dbConnection.query(queryString, queryArgs, function(err, results) {
-          // Should have one result:
-          expect(results.length).to.equal(1);
+          dbConnection.query(queryString, queryArgs, function(err, results) {
+            // Should have one result:
+            expect(results.length).to.equal(1);
 
-          // TODO If you don't have a column named text, change this test.
-          expect(results[0].txt).to.equal('In mercy\'s name, three days is all I need.');
+            // TODO If you don't have a column named text, change this test.
+            expect(results[0].txt).to.equal('In mercy\'s name, three days is all I need.');
 
-          done();
+            done();
+          });
         });
       });
     });

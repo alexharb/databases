@@ -14,6 +14,7 @@ module.exports = {
     post: function (req, res) {
       models.messages.post(req.body)
       .then((data) => {
+        console.log('its posted!', data);
         res.json('its posted!')
       })
       .catch((err) => {
@@ -36,6 +37,7 @@ module.exports = {
     post: function (req, res) {
       models.users.post(req.body)
       .then((data) => {
+        console.log('its posted! (user)', req.body);
         res.json('its posted! (user)')
       })
       .catch((err) => {
@@ -58,6 +60,7 @@ module.exports = {
     post: function (req, res) {
       models.rooms.post(req.body)
       .then((data) => {
+        console.log('its posted! (room)', data);
         res.json('its posted! (room)')
       })
       .catch((err) => {

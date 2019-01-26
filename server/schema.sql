@@ -20,8 +20,8 @@ CREATE TABLE messages (
   txt TEXT NOT NULL,
   user INTEGER,
   roomName INTEGER,
-  FOREIGN KEY(user) REFERENCES users(id),
-  FOREIGN KEY(roomName) REFERENCES rooms(id)
+  FOREIGN KEY(user) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY(roomName) REFERENCES rooms(id) ON DELETE CASCADE
 );
 
 
